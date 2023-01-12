@@ -1,0 +1,44 @@
+import { Checkbox, Text, Tooltip } from '@chakra-ui/react'
+import React from 'react'
+
+interface DisciplinaItemProps {
+  id: string
+  name: string
+  turma: number
+  isChecked: boolean
+  setIsChecked: (id: string, isChecked: boolean) => void
+}
+
+function DisciplinaItem({
+  id,
+  name,
+  turma,
+  isChecked,
+  setIsChecked,
+}: DisciplinaItemProps) {
+  return (
+    <Checkbox
+      size='sm'
+      isChecked={isChecked}
+      onChange={(e) => {
+        setIsChecked(id, e.target.checked)
+      }}
+    >
+      <Tooltip hasArrow label={name} placement='right'>
+        <Text
+          fontSize='xs'
+          color='blackAlpha.700'
+          fontWeight='bold'
+          textOverflow='ellipsis'
+          overflow='hidden'
+          whiteSpace='nowrap'
+          w='16rem'
+        >
+          {`t${turma} - ${name}`}
+        </Text>
+      </Tooltip>
+    </Checkbox>
+  )
+}
+
+export default DisciplinaItem
