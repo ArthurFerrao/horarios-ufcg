@@ -7,16 +7,9 @@ import PeriodoHeader from './PeriodoHeader'
 interface PeriodoBlockProps {
   periodoNumber: number
   items: Disciplina[]
-  handleCheckDisciplina: (id: string, isChecked: boolean) => void
-  handleCheckAllDisciplina: (periodo: number, isChecked: boolean) => void
 }
 
-function PeriodoBlock({
-  periodoNumber,
-  items,
-  handleCheckDisciplina,
-  handleCheckAllDisciplina,
-}: PeriodoBlockProps) {
+function PeriodoBlock({ periodoNumber, items }: PeriodoBlockProps) {
   const { isOpen, onToggle } = useDisclosure()
 
   return (
@@ -24,7 +17,6 @@ function PeriodoBlock({
       <PeriodoHeader
         periodoNumber={periodoNumber}
         items={items}
-        handleCheckAllDisciplina={handleCheckAllDisciplina}
         onToggle={onToggle}
         isOpen={isOpen}
       />
@@ -32,11 +24,11 @@ function PeriodoBlock({
         <Stack my={4} spacing={4}>
           {items.map((item) => (
             <DisciplinaItem
+              key={item.id}
               id={item.id}
               name={item.nome}
               turma={item.turma}
               isChecked={item.checked}
-              setIsChecked={handleCheckDisciplina}
             />
           ))}
         </Stack>

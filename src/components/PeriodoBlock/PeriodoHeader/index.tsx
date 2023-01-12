@@ -2,10 +2,11 @@ import { Checkbox, Flex, Heading, IconButton, Spacer } from '@chakra-ui/react'
 import React from 'react'
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
 
+import useAppContext from '../../../hooks/useAppContext'
+
 interface PeriodoHeaderProps {
   periodoNumber: number
   items: Disciplina[]
-  handleCheckAllDisciplina: (periodo: number, isChecked: boolean) => void
   onToggle: () => void
   isOpen: boolean
 }
@@ -13,12 +14,12 @@ interface PeriodoHeaderProps {
 function PeriodoHeader({
   periodoNumber,
   items,
-  handleCheckAllDisciplina,
   onToggle,
   isOpen,
 }: PeriodoHeaderProps) {
   const allChecked = items.every((item) => item.checked)
   const isIndeterminate = items.some((item) => item.checked) && !allChecked
+  const { handleChangeAllPeriodoCheck } = useAppContext()
 
   return (
     <Flex alignItems='center'>
@@ -26,7 +27,7 @@ function PeriodoHeader({
         isChecked={allChecked}
         isIndeterminate={isIndeterminate}
         onChange={(e) =>
-          handleCheckAllDisciplina(periodoNumber, e.target.checked)
+          handleChangeAllPeriodoCheck(periodoNumber, e.target.checked)
         }
       />
       <Spacer />

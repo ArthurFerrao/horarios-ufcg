@@ -10,22 +10,16 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 
+import useAppContext from '../../hooks/useAppContext'
 import PeriodoBlock from '../PeriodoBlock'
 import ImportButton from './ImportButton'
 
 interface SidebarPorps {
-  disciplinas: Disciplina[]
   disclosure: UseDisclosureReturn
-  handleCheckDisciplina: (id: string, isChecked: boolean) => void
-  handleCheckAllDisciplina: (periodo: number, isChecked: boolean) => void
 }
 
-function Sidebar({
-  disciplinas,
-  disclosure,
-  handleCheckDisciplina,
-  handleCheckAllDisciplina,
-}: SidebarPorps) {
+function Sidebar({ disclosure }: SidebarPorps) {
+  const { disciplinas } = useAppContext()
   const { isOpen, onClose } = disclosure
 
   const disciplinasByPeriodo = disciplinas.reduce<Map<number, Disciplina[]>>(
@@ -43,10 +37,9 @@ function Sidebar({
     .sort()
     .map((periodo) => (
       <PeriodoBlock
+        key={periodo}
         periodoNumber={periodo}
         items={disciplinasByPeriodo.get(periodo) ?? []}
-        handleCheckDisciplina={handleCheckDisciplina}
-        handleCheckAllDisciplina={handleCheckAllDisciplina}
       />
     ))
 
