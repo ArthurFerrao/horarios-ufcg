@@ -8,11 +8,15 @@ interface NavBarProps {
 
 function NavBar({ openSidebar }: NavBarProps) {
   return (
-    <Grid bgColor='#521782' templateColumns='4rem 1fr 4rem' textAlign='center'>
+    <Grid
+      bgColor='primary.400'
+      templateColumns='4rem 1fr 4rem'
+      textAlign='center'
+    >
       <Button
-        bgColor='#421268'
-        _hover={{ bg: '#471271' }}
-        _active={{ bg: '#471271' }}
+        bgColor='primary.500'
+        _hover={{ bg: 'primary.600' }}
+        _active={{ bg: 'primary.600' }}
         borderRadius={0}
         height='auto'
         onClick={openSidebar}
