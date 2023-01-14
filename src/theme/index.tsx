@@ -5,7 +5,9 @@ import Checkbox from './components/checkbox'
 
 const theme = extendTheme({
   colors,
-  components: { Checkbox },
+  components: {
+    Checkbox,
+  },
 })
 
 export default theme

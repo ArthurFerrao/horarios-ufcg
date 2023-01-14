@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 
 import NavBar from './components/NavBar'
 import Sidebar from './components/Sidebar'
+import WeekBoard from './components/WeekBoard'
 import useAppContext from './hooks/useAppContext'
 import turmas from './mock/turmas-ofertadas.json'
 import theme from './theme'
@@ -20,6 +21,7 @@ function App() {
       <div className='App'>
         <NavBar openSidebar={onOpen} />
         <Sidebar disclosure={disclosure} />
+        <WeekBoard />
       </div>
     </ChakraProvider>
   )
