@@ -1,5 +1,5 @@
 // eslint-disable-next-line prettier/prettier
-export { }
+export {}
 
 declare global {
   type horario = {
@@ -18,5 +18,6 @@ declare global {
     professor?: string
     horario: horario[]
     checked: boolean
+    marked: boolean
   }
 }

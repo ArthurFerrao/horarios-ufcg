@@ -11,6 +11,7 @@
       "tipo": "obrigatoria",
       "professor": "",
       "checked": false,
+      "marked": false,
       "horario": [
         {
           "dia": "2",
@@ -33,6 +34,7 @@
       "tipo": "obrigatoria",
       "professor": "",
       "checked": false,
+      "marked": false,
       "horario": [
         {
           "dia": "2",
@@ -55,6 +57,7 @@
       "tipo": "obrigatoria",
       "professor": "",
       "checked": false,
+      "marked": false,
       "horario": [
         {
           "dia": "2",
@@ -77,6 +80,7 @@
       "tipo": "obrigatoria",
       "professor": "",
       "checked": false,
+      "marked": false,
       "horario": [
         {
           "dia": "2",
