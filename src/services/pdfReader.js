@@ -19,7 +19,13 @@ async function getText(file) {
     storePromises.push(getPageText(pdf, j))
   }
 
-  return Promise.all(storePromises)
+  return Promise.all(storePromises).then((pages) => {
+    let concatList = []
+    pages.forEach((text) => {
+      concatList = [...concatList, ...text]
+    })
+    return concatList
+  })
 }
 
 export default function execute(file) {
@@ -28,8 +34,8 @@ export default function execute(file) {
     (res) => {
       console.log(res)
     },
-    (reason) => {
-      console.error(reason)
+    (err) => {
+      console.error(err)
     },
   )
 }

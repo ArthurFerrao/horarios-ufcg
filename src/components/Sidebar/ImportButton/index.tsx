@@ -2,7 +2,7 @@ import { Button, Text, HStack } from '@chakra-ui/react'
 import React, { useRef, ChangeEvent } from 'react'
 import { BiImport } from 'react-icons/bi'
 
-import execute from '../../../teste'
+import execute from '../../../services/pdfReader'
 
 function ImportButton() {
   const fileInput = useRef<HTMLInputElement>(null)
