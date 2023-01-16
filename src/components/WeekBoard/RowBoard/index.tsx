@@ -51,7 +51,7 @@ function HeaderBoard({ hour, days, colored = false }: HeaderBoardProps) {
           p='2'
         >
           {getDisciplinaByDay(day).map((disciplina) => (
-            <DisciplinaTag disciplina={disciplina} />
+            <DisciplinaTag key={disciplina.nome} disciplina={disciplina} />
           ))}
         </GridItem>
       ))}
