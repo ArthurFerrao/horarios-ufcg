@@ -17,7 +17,7 @@ function ImportButton() {
       const data = fileResult.target?.result
 
       if (data) {
-        execute(data)
+        execute(data).then((res) => console.log(res))
       }
       e.target.value = ''
     }

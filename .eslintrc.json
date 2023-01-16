@@ -99,7 +99,8 @@
           "ignoreCase": true
         }
       }
-    ]
+    ],
+    "no-plusplus": "off"
   },
   "settings": {
     "import/resolver": {

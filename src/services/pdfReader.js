@@ -1,6 +1,32 @@
 import * as PDFJS from 'pdfjs-dist'
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
 
+const textDenyList = [
+  '',
+  ' ',
+  'UNIVERSIDADE FEDERAL DE CAMPINA GRANDE',
+  'PRÓ-REITORIA DE ENSINO',
+  'TURMAS OFERTADAS',
+  '14102 - CIÊNCIA DA COMPUTAÇÃO - D',
+  'Disciplina',
+  'Turma',
+  'CR',
+  'CH',
+  'Horários',
+  'Ofertada para:',
+  'Saldo / Ofer.',
+  'TOTAL:',
+  'Professores:',
+]
+
+const regexDenyList = [
+  /^Período:.*/,
+  /^[0-9]{8} - .*/,
+  /^[0-9]* \/ [0 - 9]*/,
+  /^- [a-zA-Z ]*/,
+  /^[0-9]*\/[0-9]*\/[0-9]* [0-9]*:[0-9]*:[0-9]*/,
+]
+
 async function getPageText(pdf, pageNumber) {
   const page = await pdf.getPage(pageNumber)
 
@@ -28,14 +54,59 @@ async function getText(file) {
   })
 }
 
-export default function execute(file) {
-  // waiting on gettext to finish completion, or error
-  getText(file).then(
-    (res) => {
-      console.log(res)
-    },
-    (err) => {
-      console.error(err)
-    },
+function cleanText(textList) {
+  let newList = textList.filter(
+    (text) => !textDenyList.some((el) => el === text),
   )
+  newList = newList.filter((text) => !regexDenyList.some((el) => el.test(text)))
+  return newList
+}
+
+function formatSchedule(schedule) {
+  const [dia, horas] = schedule.split(' ')
+  const [inicio, fim] = horas.split('-')
+
+  return {
+    dia,
+    inicio,
+    fim,
+  }
+}
+
+function textListToJson(textList) {
+  const json = []
+  const disciplinaNameRegex = /^[0-9]* - .*/
+  let blockCount = 0
+  let obj = {}
+
+  textList.forEach((el) => {
+    if (disciplinaNameRegex.test(el)) {
+      if (obj !== {}) {
+        json.push(obj)
+      }
+
+      blockCount = 0
+      const [codigo, nome] = el.split(' - ')
+      obj = {
+        codigo,
+        nome,
+      }
+    }
+
+    if (blockCount === 1) {
+      obj.turma = el
+    } else if (blockCount >= 4) {
+      obj.horario = formatSchedule(el)
+    }
+
+    blockCount++
+  })
+  return json
+}
+
+export default async function extractData(file) {
+  const textList = await getText(file)
+  const textCleaner = cleanText(textList)
+
+  return textListToJson(textCleaner)
 }
