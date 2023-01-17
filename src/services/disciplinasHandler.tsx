@@ -17,12 +17,18 @@ async function addExtraData(disciplinas: Disciplina[], codigoCurso: string) {
       periodo = newData.periodo
     }
 
+    const horario = disciplina.horario.map((h) => ({
+      ...h,
+      id: `${h.inicio}-${h.fim}`,
+    }))
+
     return {
       ...disciplina,
       id: `${disciplina.codigo}-${disciplina.turma}`,
       checked: false,
       marked: false,
       periodo,
+      horario,
     }
   })
 }

@@ -12,8 +12,8 @@ export const DAYS_MAP: daysMapType = {
 export const DAYS = ['SEG', 'TER', 'QUA', 'QUI', 'SEX']
 
 export const HORARIOS_DEFAULT: hora[] = [
-  { inicio: '08:00', fim: '10:00' },
-  { inicio: '10:00', fim: '12:00' },
-  { inicio: '14:00', fim: '16:00' },
-  { inicio: '16:00', fim: '18:00' },
+  { id: '08:00-10:00', inicio: '08:00', fim: '10:00' },
+  { id: '10:00-12:00', inicio: '10:00', fim: '12:00' },
+  { id: '14:00-16:00', inicio: '14:00', fim: '16:00' },
+  { id: '16:00-18:00', inicio: '16:00', fim: '18:00' },
 ]

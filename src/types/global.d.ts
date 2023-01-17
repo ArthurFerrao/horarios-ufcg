@@ -3,11 +3,13 @@ export {}
 
 declare global {
   type hora = {
+    id: string
     inicio: string
     fim: string
   }
 
   type horario = {
+    id: string
     dia: string
     inicio: string
     fim: string

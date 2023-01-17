@@ -72,19 +72,16 @@ function AppProvider({ children }: { children: JSX.Element }) {
   }
 
   const getHours = () => {
-    const horarios = new Set<string>()
     const hours = [...data.map((el) => el.horario), HORARIOS_DEFAULT]
-    hours.forEach((h) => {
-      h.forEach((horario) => horarios.add(`${horario.inicio}-${horario.fim}`))
-    })
+    const horarios = hours.reduce<{ [key: string]: hora }>((prev, curr) => {
+      const newPrev = prev
+      curr.forEach((horario) => {
+        newPrev[horario.id] = horario
+      })
+      return newPrev
+    }, {})
 
-    return [...horarios].map((horario) => {
-      const [inicio, fim] = horario.split('-')
-      return {
-        inicio,
-        fim,
-      }
-    })
+    return Object.values(horarios)
   }
 
   const appProviderValue = useMemo(
