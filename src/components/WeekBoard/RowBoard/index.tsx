@@ -1,28 +1,23 @@
 import { GridItem, Text } from '@chakra-ui/react'
 import React from 'react'
 
-import { DAYS_MAP, HORARIOS_DEFAULT } from '../../../constants'
-import useAppContext from '../../../hooks/useAppContext'
+import { DAYS_MAP } from '../../../constants'
 import DisciplinaTag from '../DisciplinaTag'
 
 interface RowBoardProps {
   hour: hora
   days: string[]
   colored?: boolean
+  disciplinas: Disciplina[]
 }
 
-function RowBoard({ hour, days, colored = false }: RowBoardProps) {
-  const context = useAppContext()
-  const disciplinas = context.getDisciplinasByHour(hour, true)
+function RowBoard({ hour, days, colored = false, disciplinas }: RowBoardProps) {
   const isLast = (id: number) => id + 1 === days.length
 
   const getDisciplinaByDay = (day: string) =>
     disciplinas.filter((disciplina) =>
       disciplina.horario.some(
-        (h) =>
-          DAYS_MAP[h.dia] === day &&
-          h.inicio === hour.inicio &&
-          h.fim === hour.fim,
+        (h) => DAYS_MAP[h.dia] === day && h.id === hour.id,
       ),
     )
 
@@ -34,13 +29,6 @@ function RowBoard({ hour, days, colored = false }: RowBoardProps) {
     str += m !== '00' ? `${m}m` : ''
 
     return str
-  }
-
-  const isHorarioDefault = () =>
-    HORARIOS_DEFAULT.some((h) => h.inicio === hour.inicio && h.fim === hour.fim)
-
-  if (disciplinas.length === 0 && !isHorarioDefault()) {
-    return null
   }
 
   return (
