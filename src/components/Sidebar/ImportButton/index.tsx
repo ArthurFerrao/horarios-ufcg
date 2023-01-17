@@ -2,9 +2,11 @@ import { Button, Text, HStack } from '@chakra-ui/react'
 import React, { useRef, ChangeEvent } from 'react'
 import { BiImport } from 'react-icons/bi'
 
-import execute from '../../../services/pdfReader'
+import useAppContext from '../../../hooks/useAppContext'
+import getData from '../../../services/disciplinasHandler'
 
 function ImportButton() {
+  const context = useAppContext()
   const fileInput = useRef<HTMLInputElement>(null)
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) {
@@ -17,7 +19,9 @@ function ImportButton() {
       const data = fileResult.target?.result
 
       if (data) {
-        execute(data).then((res) => console.log(res))
+        getData(data).then((result) =>
+          context.updateDisciplinas(result.disciplinas),
+        )
       }
       e.target.value = ''
     }
@@ -28,6 +32,7 @@ function ImportButton() {
     <>
       <input
         ref={fileInput}
+        accept='.pdf'
         type='file'
         onChange={handleFileInput}
         style={{ display: 'none' }}

@@ -32,7 +32,7 @@ function PeriodoHeader({
       />
       <Spacer />
       <Heading color='blackAlpha.800' fontWeight='semibold' size='sm'>
-        {`${periodoNumber}° Período`}
+        {periodoNumber === 0 ? 'Extras' : `${periodoNumber}° Período`}
       </Heading>
       <Spacer />
       <IconButton

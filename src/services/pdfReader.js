@@ -7,7 +7,6 @@ const textDenyList = [
   'UNIVERSIDADE FEDERAL DE CAMPINA GRANDE',
   'PRÓ-REITORIA DE ENSINO',
   'TURMAS OFERTADAS',
-  '14102 - CIÊNCIA DA COMPUTAÇÃO - D',
   'Disciplina',
   'Turma',
   'CR',
@@ -19,13 +18,18 @@ const textDenyList = [
   'Professores:',
 ]
 
+const cursoCodeAndNameRegex = /^[0-9]{1,5} - .*/
+
 const regexDenyList = [
+  cursoCodeAndNameRegex,
   /^Período:.*/,
   /^[0-9]{8} - .*/,
   /^[0-9]* \/ [0 - 9]*/,
   /^- [a-zA-Z ]*/,
   /^[0-9]*\/[0-9]*\/[0-9]* [0-9]*:[0-9]*:[0-9]*/,
 ]
+
+const disciplinaCodeAndNameRegex = /^[0-9]* - .*/
 
 async function getPageText(pdf, pageNumber) {
   const page = await pdf.getPage(pageNumber)
@@ -73,40 +77,64 @@ function formatSchedule(schedule) {
   }
 }
 
-function textListToJson(textList) {
+function textListToJson(dataList) {
   const json = []
-  const disciplinaNameRegex = /^[0-9]* - .*/
   let blockCount = 0
-  let obj = {}
+  let disciplinaObj = null
 
-  textList.forEach((el) => {
-    if (disciplinaNameRegex.test(el)) {
-      if (obj !== {}) {
-        json.push(obj)
+  dataList.forEach((data) => {
+    if (disciplinaCodeAndNameRegex.test(data)) {
+      if (disciplinaObj !== null) {
+        json.push(disciplinaObj)
       }
 
       blockCount = 0
-      const [codigo, nome] = el.split(' - ')
-      obj = {
+      const [codigo, nome] = data.split(' - ')
+      disciplinaObj = {
         codigo,
         nome,
+        horario: [],
       }
     }
 
     if (blockCount === 1) {
-      obj.turma = el
+      disciplinaObj.turma = data
     } else if (blockCount >= 4) {
-      obj.horario = formatSchedule(el)
+      disciplinaObj.horario.push(formatSchedule(data))
     }
 
     blockCount++
   })
+
   return json
 }
 
-export default async function extractData(file) {
-  const textList = await getText(file)
-  const textCleaner = cleanText(textList)
+function getCursoData(dataList) {
+  const cursoData = {
+    nomeCurso: null,
+    codigoCurso: null,
+  }
+  const cursoText = dataList.find((data) => cursoCodeAndNameRegex.test(data))
 
-  return textListToJson(textCleaner)
+  if (cursoText) {
+    const [codigo, nome] = cursoText.split(' - ')
+    cursoData.codigoCurso = codigo
+    cursoData.nomeCurso = nome
+  }
+
+  return cursoData
+}
+
+export default async function extractData(file) {
+  const dataList = await getText(file)
+  const cursoData = getCursoData(dataList)
+  const clearData = cleanText(dataList)
+  const disciplinas = textListToJson(clearData)
+
+  const data = {
+    ...cursoData,
+    disciplinas,
+  }
+
+  return data
 }

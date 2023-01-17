@@ -12,9 +12,9 @@ declare global {
     id: string
     codigo: string
     nome: string
-    periodo: number
+    periodo?: number
     turma: number
-    tipo: string
+    tipo?: string
     professor?: string
     horario: horario[]
     checked: boolean

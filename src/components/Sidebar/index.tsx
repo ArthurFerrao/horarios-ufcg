@@ -24,11 +24,11 @@ function Sidebar({ disclosure }: SidebarPorps) {
 
   const disciplinasByPeriodo = disciplinas.reduce<Map<number, Disciplina[]>>(
     (prev, curr) => {
-      const { periodo } = curr
-      const newMap = prev
-      newMap.set(periodo, [...(prev.get(periodo) ?? []), curr])
-
-      return newMap
+      let { periodo } = curr
+      if (!periodo) {
+        periodo = 0
+      }
+      return prev.set(periodo, [...(prev.get(periodo) ?? []), curr])
     },
     new Map(),
   )
