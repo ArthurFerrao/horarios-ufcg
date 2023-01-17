@@ -23,7 +23,7 @@ function NavBar({ openSidebar }: NavBarProps) {
       >
         <BsListCheck color='#FFF' size='2.4rem' />
       </Button>
-      <Heading size='lg' fontWeight='medium' color='#E8E8E8' m={2}>
+      <Heading size='lg' fontWeight='medium' color='white' m={2}>
         Horários
         <Text display='inline' fontWeight='light'>
           UFCG

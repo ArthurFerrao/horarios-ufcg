@@ -7,6 +7,7 @@ import {
   UseDisclosureReturn,
   VStack,
   StackDivider,
+  DrawerCloseButton,
 } from '@chakra-ui/react'
 import React from 'react'
 
@@ -24,10 +25,7 @@ function Sidebar({ disclosure }: SidebarPorps) {
 
   const disciplinasByPeriodo = disciplinas.reduce<Map<number, Disciplina[]>>(
     (prev, curr) => {
-      let { periodo } = curr
-      if (!periodo) {
-        periodo = 0
-      }
+      const periodo = curr.periodo ?? 0
       return prev.set(periodo, [...(prev.get(periodo) ?? []), curr])
     },
     new Map(),
@@ -44,9 +42,10 @@ function Sidebar({ disclosure }: SidebarPorps) {
     ))
 
   return (
-    <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
+    <Drawer size='xs' placement='left' onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay />
       <DrawerContent>
+        <DrawerCloseButton />
         <DrawerHeader bg='blackAlpha.100' textAlign='center'>
           <ImportButton />
         </DrawerHeader>

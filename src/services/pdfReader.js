@@ -22,6 +22,7 @@ const cursoCodeAndNameRegex = /^[0-9]{1,5} - .*/
 
 const regexDenyList = [
   cursoCodeAndNameRegex,
+  /^Saldo \/ Ofer. .*/,
   /^Período:.*/,
   /^[0-9]{8} - .*/,
   /^[0-9]* \/ [0 - 9]*/,

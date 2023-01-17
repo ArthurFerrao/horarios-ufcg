@@ -1,28 +1,17 @@
 import { GridItem, Text } from '@chakra-ui/react'
 import React from 'react'
 
+import { DAYS_MAP, HORARIOS_DEFAULT } from '../../../constants'
 import useAppContext from '../../../hooks/useAppContext'
-import formatHour from '../../../utils/hourFormatter'
 import DisciplinaTag from '../DisciplinaTag'
 
-type daysMapType = {
-  [key: string]: string
-}
-const DAYS_MAP: daysMapType = {
-  '2': 'SEG',
-  '3': 'TER',
-  '4': 'QUA',
-  '5': 'QUI',
-  '6': 'SEX',
-}
-
-interface HeaderBoardProps {
-  hour: string
+interface RowBoardProps {
+  hour: hora
   days: string[]
   colored?: boolean
 }
 
-function HeaderBoard({ hour, days, colored = false }: HeaderBoardProps) {
+function RowBoard({ hour, days, colored = false }: RowBoardProps) {
   const context = useAppContext()
   const disciplinas = context.getDisciplinasByHour(hour, true)
   const isLast = (id: number) => id + 1 === days.length
@@ -30,17 +19,35 @@ function HeaderBoard({ hour, days, colored = false }: HeaderBoardProps) {
   const getDisciplinaByDay = (day: string) =>
     disciplinas.filter((disciplina) =>
       disciplina.horario.some(
-        (h) => DAYS_MAP[h.dia] === day && formatHour(h.inicio) === hour,
+        (h) =>
+          DAYS_MAP[h.dia] === day &&
+          h.inicio === hour.inicio &&
+          h.fim === hour.fim,
       ),
     )
 
   const getBackGround = () => (colored ? 'blackAlpha.100' : '')
 
+  const formatHour = (hourStr: string) => {
+    const [h, m] = hourStr.split(':')
+    let str = `${h}h`
+    str += m !== '00' ? `${m}m` : ''
+
+    return str
+  }
+
+  const isHorarioDefault = () =>
+    HORARIOS_DEFAULT.some((h) => h.inicio === hour.inicio && h.fim === hour.fim)
+
+  if (disciplinas.length === 0 && !isHorarioDefault()) {
+    return null
+  }
+
   return (
     <>
       <GridItem bg={getBackGround()} textAlign='center' py='2'>
         <Text color='primary.400' fontWeight='semibold'>
-          {hour}h
+          {formatHour(hour.inicio)}
         </Text>
       </GridItem>
       {days.map((day, id) => (
@@ -59,4 +66,4 @@ function HeaderBoard({ hour, days, colored = false }: HeaderBoardProps) {
   )
 }
 
-export default HeaderBoard
+export default RowBoard

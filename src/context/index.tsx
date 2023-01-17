@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext, useState, useMemo } from 'react'
 
-import formatHour from '../utils/hourFormatter'
+import { HORARIOS_DEFAULT } from '../constants'
 
 interface AppContextProps {
   disciplinas: Disciplina[]
   updateDisciplinas: (disciplina: Disciplina[]) => void
   handleChangeDisciplinaCheck: (id: string, isChecked: boolean) => void
   handleChangeAllPeriodoCheck: (periodo: number, isChecked: boolean) => void
-  getDisciplinasByHour: (hour: string, onlyChecked: boolean) => Disciplina[]
+  getDisciplinasByHour: (hour: hora, onlyChecked: boolean) => Disciplina[]
   markDisciplina: (id: string) => void
+  getHours: () => hora[]
 }
 
 const AppContext = createContext<AppContextProps>({
@@ -19,6 +20,7 @@ const AppContext = createContext<AppContextProps>({
   handleChangeAllPeriodoCheck: () => {},
   getDisciplinasByHour: () => [],
   markDisciplina: () => {},
+  getHours: () => [],
 })
 
 function AppProvider({ children }: { children: JSX.Element }) {
@@ -50,9 +52,11 @@ function AppProvider({ children }: { children: JSX.Element }) {
     setData(newState)
   }
 
-  const getDisciplinasByHour = (hour: string, onlyChecked: boolean) => {
+  const getDisciplinasByHour = (hour: hora, onlyChecked: boolean) => {
     const hasHour = (disciplina: Disciplina) =>
-      disciplina.horario.some((value) => formatHour(value.inicio) === hour)
+      disciplina.horario.some(
+        (value) => value.inicio === hour.inicio && value.fim === hour.fim,
+      )
 
     return data.filter(
       (disciplina) =>
@@ -67,6 +71,22 @@ function AppProvider({ children }: { children: JSX.Element }) {
     setData(newData)
   }
 
+  const getHours = () => {
+    const horarios = new Set<string>()
+    const hours = [...data.map((el) => el.horario), HORARIOS_DEFAULT]
+    hours.forEach((h) => {
+      h.forEach((horario) => horarios.add(`${horario.inicio}-${horario.fim}`))
+    })
+
+    return [...horarios].map((horario) => {
+      const [inicio, fim] = horario.split('-')
+      return {
+        inicio,
+        fim,
+      }
+    })
+  }
+
   const appProviderValue = useMemo(
     () => ({
       disciplinas: data,
@@ -75,6 +95,7 @@ function AppProvider({ children }: { children: JSX.Element }) {
       handleChangeAllPeriodoCheck,
       getDisciplinasByHour,
       markDisciplina,
+      getHours,
     }),
     [data],
   )

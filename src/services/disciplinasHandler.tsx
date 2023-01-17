@@ -11,7 +11,8 @@ async function addExtraData(disciplinas: Disciplina[], codigoCurso: string) {
     let periodo = 0
     if (extraData) {
       const newData = extraData.find(
-        (data: any) => data.codigoDisciplina === disciplina.codigo,
+        (data: { codigoDisciplina: string }) =>
+          data.codigoDisciplina === disciplina.codigo,
       )
       periodo = newData.periodo
     }
@@ -26,7 +27,7 @@ async function addExtraData(disciplinas: Disciplina[], codigoCurso: string) {
   })
 }
 
-export default async function getData(file: File | any) {
+export default async function getData(file: string | ArrayBuffer) {
   const data = await extractData(file)
   const disciplinas = await addExtraData(
     data.disciplinas,

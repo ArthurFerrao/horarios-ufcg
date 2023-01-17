@@ -32,7 +32,7 @@ function DisciplinaTag({ disciplina }: DisciplinaTagProps) {
         context.markDisciplina(disciplina.id)
       }}
     >
-      {`t${disciplina.turma} - ${disciplina.nome}`}
+      {`${disciplina.nome} - t${disciplina.turma}`}
     </Tag>
   )
 }
