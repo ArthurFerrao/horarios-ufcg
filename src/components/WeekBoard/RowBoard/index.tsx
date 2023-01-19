@@ -43,6 +43,7 @@ function RowBoard({ hour, days, colored, disciplinas }: RowBoardProps) {
             border='1px solid'
             borderColor='primary.400'
             opacity='1'
+            bg='primary.400'
           />
           <Text color='primary.400' fontWeight='semibold'>
             {formatHour(hour.fim)}
