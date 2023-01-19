@@ -13,15 +13,16 @@ import { memo } from 'react'
 
 import useAppContext from '../../hooks/useAppContext'
 import PeriodoBlock from '../PeriodoBlock'
-import ImportButton from './ImportButton'
+import ImportDataButton from './ImportDataButton'
 
 interface SidebarPorps {
-  disclosure: UseDisclosureReturn
+  onOpenModal: () => void
+  isOpenSideBar: boolean
+  onCloseSideBar: () => void
 }
 
-function Sidebar({ disclosure }: SidebarPorps) {
+function Sidebar({ onOpenModal, isOpenSideBar, onCloseSideBar }: SidebarPorps) {
   const { disciplinas } = useAppContext()
-  const { isOpen, onClose } = disclosure
 
   const disciplinasByPeriodo = disciplinas.reduce<Map<number, Disciplina[]>>(
     (prev, curr) => {
@@ -42,12 +43,17 @@ function Sidebar({ disclosure }: SidebarPorps) {
     ))
 
   return (
-    <Drawer size='xs' placement='left' onClose={onClose} isOpen={isOpen}>
+    <Drawer
+      size='xs'
+      placement='left'
+      onClose={onCloseSideBar}
+      isOpen={isOpenSideBar}
+    >
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
         <DrawerHeader bg='blackAlpha.100' textAlign='center'>
-          <ImportButton />
+          <ImportDataButton onOpenModal={onOpenModal} />
         </DrawerHeader>
         <DrawerBody p={0} bg='blackAlpha.100'>
           <VStack
