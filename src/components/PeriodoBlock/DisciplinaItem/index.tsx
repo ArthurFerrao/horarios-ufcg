@@ -12,14 +12,14 @@ interface DisciplinaItemProps {
 
 function DisciplinaItem({ id, name, turma, isChecked }: DisciplinaItemProps) {
   const context = useAppContext()
-  const { handleChangeDisciplinaCheck } = context
+  const { setCheckedById } = context
 
   return (
     <Checkbox
       size='sm'
       isChecked={isChecked}
       onChange={(e) => {
-        handleChangeDisciplinaCheck(id, e.target.checked)
+        setCheckedById(id, e.target.checked)
       }}
     >
       <Tooltip hasArrow label={name} placement='right'>

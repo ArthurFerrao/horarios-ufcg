@@ -29,7 +29,7 @@ function DisciplinaTag({ disciplina }: DisciplinaTagProps) {
       mr='1'
       _hover={hover}
       onClick={() => {
-        context.markDisciplina(disciplina.id)
+        context.setMarkedById(disciplina.id)
       }}
     >
       {`${disciplina.nome} - t${disciplina.turma}`}

@@ -19,16 +19,14 @@ function PeriodoHeader({
 }: PeriodoHeaderProps) {
   const allChecked = items.every((item) => item.checked)
   const isIndeterminate = items.some((item) => item.checked) && !allChecked
-  const { handleChangeAllPeriodoCheck } = useAppContext()
+  const { setCheckedByPeriodo } = useAppContext()
 
   return (
     <Flex alignItems='center'>
       <Checkbox
         isChecked={allChecked}
         isIndeterminate={isIndeterminate}
-        onChange={(e) =>
-          handleChangeAllPeriodoCheck(periodoNumber, e.target.checked)
-        }
+        onChange={(e) => setCheckedByPeriodo(periodoNumber, e.target.checked)}
       />
       <Spacer />
       <Heading color='blackAlpha.800' fontWeight='semibold' size='sm'>

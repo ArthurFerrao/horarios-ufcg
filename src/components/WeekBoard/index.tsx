@@ -1,5 +1,5 @@
 import { Grid } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { DAYS, HORARIOS_DEFAULT } from '../../constants'
 import useAppContext from '../../hooks/useAppContext'
@@ -7,7 +7,7 @@ import HeaderBoard from './HeaderBoard'
 import RowBoard from './RowBoard'
 
 function WeekBoard() {
-  const { getHours, getDisciplinasByHour } = useAppContext()
+  const { getDisciplinasByHour, boardHours } = useAppContext()
 
   const isEven = (num: number) => num % 2 === 0
 
@@ -20,34 +20,32 @@ function WeekBoard() {
   const isHorarioDefault = (hour: hora) =>
     HORARIOS_DEFAULT.some((h) => h.id === hour.id)
 
-  const getRowBordList = () => {
-    const hours = getHours()
-    const list: JSX.Element[] = []
-    let contRows = 0
+  const getDisciplinasByHourMap = () =>
+    boardHours.map((hour) => ({
+      horario: hour,
+      disciplinas: getDisciplinasByHour(hour, true),
+    }))
 
-    hours.sort(hourSort).forEach((hour) => {
-      const disciplinas = getDisciplinasByHour(hour, true)
-      if (disciplinas.length !== 0 || isHorarioDefault(hour)) {
-        list.push(
-          <RowBoard
-            key={`${hour.inicio}-${hour.fim}`}
-            hour={hour}
-            days={DAYS}
-            disciplinas={disciplinas}
-            colored={isEven(contRows)}
-          />,
-        )
-        contRows++
-      }
-    })
-
-    return list
-  }
+  const getRowBordList = () =>
+    getDisciplinasByHourMap()
+      .sort((a, b) => hourSort(a.horario, b.horario))
+      .filter(
+        ({ horario, disciplinas }) =>
+          disciplinas.length !== 0 || isHorarioDefault(horario),
+      )
 
   return (
-    <Grid templateColumns='65px repeat(5, 1fr)' marginTop='28'>
+    <Grid templateColumns='65px repeat(6, 1fr)' marginTop='28'>
       <HeaderBoard days={DAYS} />
-      {getRowBordList()}
+      {getRowBordList().map(({ horario, disciplinas }, id) => (
+        <RowBoard
+          key={`${horario.inicio}-${horario.fim}`}
+          hour={horario}
+          days={DAYS}
+          disciplinas={disciplinas}
+          colored={isEven(id)}
+        />
+      ))}
     </Grid>
   )
 }

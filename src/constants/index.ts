@@ -7,9 +7,10 @@ export const DAYS_MAP: daysMapType = {
   '4': 'QUA',
   '5': 'QUI',
   '6': 'SEX',
+  '7': 'SAB',
 }
 
-export const DAYS = ['SEG', 'TER', 'QUA', 'QUI', 'SEX']
+export const DAYS = Object.values(DAYS_MAP)
 
 export const HORARIOS_DEFAULT: hora[] = [
   { id: '08:00-10:00', inicio: '08:00', fim: '10:00' },

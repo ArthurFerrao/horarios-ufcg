@@ -1,36 +1,37 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createContext, useState, useMemo } from 'react'
+import { createContext, useState, useMemo, useEffect } from 'react'
 
 import { HORARIOS_DEFAULT } from '../constants'
 
 interface AppContextProps {
   disciplinas: Disciplina[]
+  boardHours: hora[]
   updateDisciplinas: (disciplina: Disciplina[]) => void
-  handleChangeDisciplinaCheck: (id: string, isChecked: boolean) => void
-  handleChangeAllPeriodoCheck: (periodo: number, isChecked: boolean) => void
+  setCheckedById: (id: string, isChecked: boolean) => void
+  setCheckedByPeriodo: (periodo: number, isChecked: boolean) => void
   getDisciplinasByHour: (hour: hora, onlyChecked: boolean) => Disciplina[]
-  markDisciplina: (id: string) => void
-  getHours: () => hora[]
+  setMarkedById: (id: string) => void
 }
 
 const AppContext = createContext<AppContextProps>({
   disciplinas: [],
+  boardHours: [],
   updateDisciplinas: () => {},
-  handleChangeDisciplinaCheck: () => {},
-  handleChangeAllPeriodoCheck: () => {},
+  setCheckedById: () => {},
+  setCheckedByPeriodo: () => {},
   getDisciplinasByHour: () => [],
-  markDisciplina: () => {},
-  getHours: () => [],
+  setMarkedById: () => {},
 })
 
 function AppProvider({ children }: { children: JSX.Element }) {
   const [data, setData] = useState<Disciplina[]>([])
+  const [boardHours, setBoardHours] = useState<hora[]>(HORARIOS_DEFAULT)
 
   const updateDisciplinas = (disciplinas: Disciplina[]) => {
     setData(disciplinas)
   }
 
-  const handleChangeDisciplinaCheck = (id: string, isChecked: boolean) => {
+  const setCheckedById = (id: string, isChecked: boolean) => {
     const newState = data.map((item) =>
       item.id === id ? { ...item, checked: isChecked } : item,
     )
@@ -38,25 +39,17 @@ function AppProvider({ children }: { children: JSX.Element }) {
     setData(newState)
   }
 
-  const handleChangeAllPeriodoCheck = (periodo: number, isChecked: boolean) => {
-    const newState = data.map((item) => {
-      if (item.periodo === periodo) {
-        return {
-          ...item,
-          checked: isChecked,
-        }
-      }
-      return item
-    })
+  const setCheckedByPeriodo = (periodo: number, isChecked: boolean) => {
+    const newState = data.map((item) =>
+      item.periodo === periodo ? { ...item, checked: isChecked } : item,
+    )
 
     setData(newState)
   }
 
   const getDisciplinasByHour = (hour: hora, onlyChecked: boolean) => {
     const hasHour = (disciplina: Disciplina) =>
-      disciplina.horario.some(
-        (value) => value.inicio === hour.inicio && value.fim === hour.fim,
-      )
+      disciplina.horario.some((h) => h.id === hour.id)
 
     return data.filter(
       (disciplina) =>
@@ -64,9 +57,11 @@ function AppProvider({ children }: { children: JSX.Element }) {
     )
   }
 
-  const markDisciplina = (id: string) => {
-    const newData = data.map((v) =>
-      v.id === id ? { ...v, marked: !v.marked } : v,
+  const setMarkedById = (id: string) => {
+    const newData = data.map((disciplina) =>
+      disciplina.id === id
+        ? { ...disciplina, marked: !disciplina.marked }
+        : disciplina,
     )
     setData(newData)
   }
@@ -84,15 +79,19 @@ function AppProvider({ children }: { children: JSX.Element }) {
     return Object.values(horarios)
   }
 
+  useEffect(() => {
+    setBoardHours(getHours())
+  }, [data])
+
   const appProviderValue = useMemo(
     () => ({
       disciplinas: data,
+      boardHours,
       updateDisciplinas,
-      handleChangeDisciplinaCheck,
-      handleChangeAllPeriodoCheck,
+      setCheckedById,
+      setCheckedByPeriodo,
       getDisciplinasByHour,
-      markDisciplina,
-      getHours,
+      setMarkedById,
     }),
     [data],
   )
