@@ -17,9 +17,9 @@ function PeriodoHeader({
   onToggle,
   isOpen,
 }: PeriodoHeaderProps) {
+  const { setCheckedByPeriodo } = useAppContext()
   const allChecked = items.every((item) => item.checked)
   const isIndeterminate = items.some((item) => item.checked) && !allChecked
-  const { setCheckedByPeriodo } = useAppContext()
 
   return (
     <Flex alignItems='center'>

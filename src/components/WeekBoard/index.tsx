@@ -1,5 +1,4 @@
 import { Grid } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
 
 import { DAYS, HORARIOS_DEFAULT } from '../../constants'
 import useAppContext from '../../hooks/useAppContext'
@@ -20,24 +19,22 @@ function WeekBoard() {
   const isHorarioDefault = (hour: hora) =>
     HORARIOS_DEFAULT.some((h) => h.id === hour.id)
 
-  const getDisciplinasByHourMap = () =>
-    boardHours.map((hour) => ({
-      horario: hour,
-      disciplinas: getDisciplinasByHour(hour, true),
-    }))
+  const disciplinasByHourMap = boardHours.map((hour) => ({
+    horario: hour,
+    disciplinas: getDisciplinasByHour(hour, true),
+  }))
 
-  const getRowBordList = () =>
-    getDisciplinasByHourMap()
-      .sort((a, b) => hourSort(a.horario, b.horario))
-      .filter(
-        ({ horario, disciplinas }) =>
-          disciplinas.length !== 0 || isHorarioDefault(horario),
-      )
+  const rowBordList = disciplinasByHourMap
+    .sort((a, b) => hourSort(a.horario, b.horario))
+    .filter(
+      ({ horario, disciplinas }) =>
+        disciplinas.length !== 0 || isHorarioDefault(horario),
+    )
 
   return (
     <Grid templateColumns='65px repeat(6, 1fr)' marginTop='28'>
       <HeaderBoard days={DAYS} />
-      {getRowBordList().map(({ horario, disciplinas }, id) => (
+      {rowBordList.map(({ horario, disciplinas }, id) => (
         <RowBoard
           key={`${horario.inicio}-${horario.fim}`}
           hour={horario}

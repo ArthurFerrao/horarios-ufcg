@@ -11,8 +11,7 @@ interface DisciplinaItemProps {
 }
 
 function DisciplinaItem({ id, name, turma, isChecked }: DisciplinaItemProps) {
-  const context = useAppContext()
-  const { setCheckedById } = context
+  const { setCheckedById } = useAppContext()
 
   return (
     <Checkbox

@@ -6,7 +6,7 @@ import useAppContext from '../../../hooks/useAppContext'
 import getData from '../../../services/disciplinasHandler'
 
 function ImportButton() {
-  const context = useAppContext()
+  const { updateDisciplinas } = useAppContext()
   const fileInput = useRef<HTMLInputElement>(null)
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) {
@@ -19,9 +19,7 @@ function ImportButton() {
       const data = fileResult.target?.result
 
       if (data) {
-        getData(data).then((result) =>
-          context.updateDisciplinas(result.disciplinas),
-        )
+        getData(data).then((result) => updateDisciplinas(result.disciplinas))
       }
       e.target.value = ''
     }

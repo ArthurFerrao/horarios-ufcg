@@ -3,18 +3,14 @@ import extractData from './pdfReader'
 
 async function addExtraData(disciplinas: Disciplina[], codigoCurso: string) {
   const extraData = cursosExtraData[codigoCurso]
-  if (!extraData) {
-    return disciplinas
-  }
 
   return disciplinas.map((disciplina) => {
     let periodo = 0
     if (extraData) {
       const newData = extraData.find(
-        (data: { codigoDisciplina: string }) =>
-          data.codigoDisciplina === disciplina.codigo,
+        (data) => data.codigoDisciplina === disciplina.codigo,
       )
-      periodo = newData.periodo
+      periodo = newData?.periodo ?? 0
     }
 
     const horario = disciplina.horario.map((h) => ({

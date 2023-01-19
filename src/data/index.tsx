@@ -1,7 +1,7 @@
 import curso14102 from './14102.json'
 
 type cursosExtraDataType = {
-  [key: string]: any
+  [key: string]: { codigoDisciplina: string; periodo: number }[]
 }
 
 const cursosExtraData: cursosExtraDataType = {

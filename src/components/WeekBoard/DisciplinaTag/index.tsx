@@ -17,7 +17,7 @@ interface DisciplinaTagProps {
 }
 
 function DisciplinaTag({ disciplina }: DisciplinaTagProps) {
-  const context = useAppContext()
+  const { setMarkedById } = useAppContext()
 
   return (
     <Tag
@@ -29,7 +29,7 @@ function DisciplinaTag({ disciplina }: DisciplinaTagProps) {
       mr='1'
       _hover={hover}
       onClick={() => {
-        context.setMarkedById(disciplina.id)
+        setMarkedById(disciplina.id)
       }}
     >
       {`${disciplina.nome} - t${disciplina.turma}`}
