@@ -9,7 +9,7 @@ import {
   StackDivider,
   DrawerCloseButton,
 } from '@chakra-ui/react'
-import React from 'react'
+import { memo } from 'react'
 
 import useAppContext from '../../hooks/useAppContext'
 import PeriodoBlock from '../PeriodoBlock'
@@ -63,4 +63,4 @@ function Sidebar({ disclosure }: SidebarPorps) {
   )
 }
 
-export default Sidebar
+export default memo(Sidebar)

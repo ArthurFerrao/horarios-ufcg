@@ -1,5 +1,5 @@
 import { Button, Grid, Heading, Text } from '@chakra-ui/react'
-import React from 'react'
+import { memo } from 'react'
 import { BsListCheck } from 'react-icons/bs'
 
 interface NavBarProps {
@@ -33,4 +33,4 @@ function NavBar({ openSidebar }: NavBarProps) {
   )
 }
 
-export default NavBar
+export default memo(NavBar)
