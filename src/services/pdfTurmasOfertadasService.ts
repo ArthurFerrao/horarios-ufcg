@@ -1,5 +1,4 @@
-import * as PDFJS from 'pdfjs-dist'
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
+import getText from './pdfReaderService'
 
 const textDenyList = [
   '',
@@ -32,34 +31,7 @@ const regexDenyList = [
 
 const disciplinaCodeAndNameRegex = /^[0-9]* - .*/
 
-async function getPageText(pdf, pageNumber) {
-  const page = await pdf.getPage(pageNumber)
-
-  const textContent = await page.getTextContent()
-  return textContent.items.map((s) => s.str)
-}
-
-async function getText(file) {
-  PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker
-  const document = PDFJS.getDocument(file)
-  const pdf = await document.promise
-  const maxPages = pdf.numPages
-
-  const storePromises = []
-  for (let j = 1; j <= maxPages; j += 1) {
-    storePromises.push(getPageText(pdf, j))
-  }
-
-  return Promise.all(storePromises).then((pages) => {
-    let concatList = []
-    pages.forEach((text) => {
-      concatList = [...concatList, ...text]
-    })
-    return concatList
-  })
-}
-
-function cleanText(textList) {
+function cleanText(textList: string[]) {
   let newList = textList.filter(
     (text) => !textDenyList.some((el) => el === text),
   )
@@ -67,7 +39,7 @@ function cleanText(textList) {
   return newList
 }
 
-function formatSchedule(schedule) {
+function formatSchedule(schedule: string) {
   const [dia, horas] = schedule.split(' ')
   const [inicio, fim] = horas.split('-')
 
@@ -78,14 +50,14 @@ function formatSchedule(schedule) {
   }
 }
 
-function textListToJson(dataList) {
-  const json = []
+function textListToJson(dataList: string[]) {
+  const json: DisciplinaPdf[] = []
   let blockCount = 0
-  let disciplinaObj = null
+  let disciplinaObj: DisciplinaPdf
 
   dataList.forEach((data) => {
     if (disciplinaCodeAndNameRegex.test(data)) {
-      if (disciplinaObj !== null) {
+      if (disciplinaObj) {
         json.push(disciplinaObj)
       }
 
@@ -95,6 +67,7 @@ function textListToJson(dataList) {
         codigo,
         nome,
         horario: [],
+        turma: '',
       }
     }
 
@@ -110,10 +83,10 @@ function textListToJson(dataList) {
   return json
 }
 
-function getCursoData(dataList) {
+function getCursoData(dataList: string[]) {
   const cursoData = {
-    nomeCurso: null,
-    codigoCurso: null,
+    nomeCurso: '',
+    codigoCurso: '',
   }
   const cursoText = dataList.find((data) => cursoCodeAndNameRegex.test(data))
 
@@ -126,10 +99,13 @@ function getCursoData(dataList) {
   return cursoData
 }
 
-export default async function extractData(file) {
+export default async function getTurmasOfertadasData(
+  file: string | ArrayBuffer,
+) {
   const dataList = await getText(file)
   const cursoData = getCursoData(dataList)
   const clearData = cleanText(dataList)
+
   const disciplinas = textListToJson(clearData)
 
   const data = {

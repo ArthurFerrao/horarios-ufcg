@@ -6,7 +6,7 @@ import useAppContext from '../../../hooks/useAppContext'
 interface DisciplinaItemProps {
   id: string
   name: string
-  turma: number
+  turma: string
   isChecked: boolean
 }
 

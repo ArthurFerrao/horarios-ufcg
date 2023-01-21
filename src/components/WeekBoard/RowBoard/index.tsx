@@ -5,7 +5,7 @@ import { DAYS_MAP } from '../../../constants'
 import DisciplinaTag from '../DisciplinaTag'
 
 interface RowBoardProps {
-  hour: hora
+  hour: Hora
   days: string[]
   colored?: boolean
   disciplinas: Disciplina[]

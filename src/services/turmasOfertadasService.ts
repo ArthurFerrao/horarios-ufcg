@@ -1,7 +1,7 @@
 import cursosExtraData from '../data'
-import extractData from './pdfReader'
+import getTurmasOfertadasData from './pdfTurmasOfertadasService'
 
-async function addExtraData(disciplinas: Disciplina[], codigoCurso: string) {
+async function addExtraData(disciplinas: DisciplinaPdf[], codigoCurso: string) {
   const extraData = cursosExtraData[codigoCurso]
 
   return disciplinas.map((disciplina) => {
@@ -30,7 +30,7 @@ async function addExtraData(disciplinas: Disciplina[], codigoCurso: string) {
 }
 
 export default async function getData(file: string | ArrayBuffer) {
-  const data = await extractData(file)
+  const data = await getTurmasOfertadasData(file)
   const disciplinas = await addExtraData(
     data.disciplinas,
     data.codigoCurso ?? '',

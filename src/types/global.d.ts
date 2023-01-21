@@ -2,28 +2,28 @@
 export {}
 
 declare global {
-  type hora = {
+  type Hora = {
     id: string
     inicio: string
     fim: string
   }
 
-  type horario = {
-    id: string
+  type Horario = Hora & {
     dia: string
-    inicio: string
-    fim: string
   }
 
-  type Disciplina = {
-    id: string
+  type DisciplinaPdf = {
     codigo: string
     nome: string
+    turma: string
+    horario: horario[]
+  }
+
+  type Disciplina = DisciplinaPdf & {
+    id: string
     periodo?: number
-    turma: number
     tipo?: string
     professor?: string
-    horario: horario[]
     checked: boolean
     marked: boolean
   }

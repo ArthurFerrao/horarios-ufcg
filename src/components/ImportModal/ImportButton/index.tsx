@@ -1,18 +1,26 @@
-import { Button, Text, HStack } from '@chakra-ui/react'
-import React, { useRef, ChangeEvent } from 'react'
+import { Button, Text, HStack, useToast } from '@chakra-ui/react'
+import React, { useRef, ChangeEvent, useState } from 'react'
 import { BiImport } from 'react-icons/bi'
 
 import useAppContext from '../../../hooks/useAppContext'
-import getData from '../../../services/disciplinasHandler'
+import getData from '../../../services/turmasOfertadasService'
 
 interface ImportButtonPorps {
   onCloseModal: () => void
 }
 
 function ImportButton({ onCloseModal }: ImportButtonPorps) {
+  const [isLoadingPdf, setIsLoadingPdf] = useState(false)
   const { updateDisciplinas } = useAppContext()
   const fileInput = useRef<HTMLInputElement>(null)
+  const toast = useToast()
 
+  const toastError = () =>
+    toast({
+      title: 'Erro ao importar pdf',
+      status: 'error',
+      isClosable: true,
+    })
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) {
       return
@@ -24,10 +32,17 @@ function ImportButton({ onCloseModal }: ImportButtonPorps) {
       const data = fileResult.target?.result
 
       if (data) {
-        getData(data).then((result) => {
-          updateDisciplinas(result.disciplinas)
-          onCloseModal()
-        })
+        setIsLoadingPdf(true)
+        getData(data)
+          .then((result) => {
+            updateDisciplinas(result.disciplinas)
+            setIsLoadingPdf(false)
+            onCloseModal()
+          })
+          .catch((err) => {
+            setIsLoadingPdf(false)
+            toastError()
+          })
       }
       e.target.value = ''
     }
@@ -45,6 +60,8 @@ function ImportButton({ onCloseModal }: ImportButtonPorps) {
         style={{ display: 'none' }}
       />
       <Button
+        isLoading={isLoadingPdf}
+        loadingText='Carregando'
         my='10'
         size='lg'
         colorScheme='blackAlpha'

@@ -9,8 +9,10 @@ import {
   Text,
   ModalHeader,
   Link,
+  Image,
 } from '@chakra-ui/react'
 
+import gif from '../../assets/turmasOfertadasPdf.gif'
 import ImportButton from './ImportButton'
 
 interface ImportModalProps {
@@ -45,6 +47,12 @@ function ImportModal({ isOpenModal, onCloseModal }: ImportModalProps) {
             </Link>{' '}
             do Controle Academico.
           </Text>
+          <Image
+            src={gif}
+            alt='Download Turmas Ofertadas PDF'
+            my='3'
+            borderRadius='2xl'
+          />
           <Text fontSize='2xl' as='b' textColor='blackAlpha.800'>
             Em seguida importe o pfd clicando no botão abaixo.
           </Text>
