@@ -39,7 +39,7 @@ function ImportButton({ onCloseModal }: ImportButtonPorps) {
             setIsLoadingPdf(false)
             onCloseModal()
           })
-          .catch((err) => {
+          .catch(() => {
             setIsLoadingPdf(false)
             toastError()
           })
@@ -62,11 +62,15 @@ function ImportButton({ onCloseModal }: ImportButtonPorps) {
       <Button
         isLoading={isLoadingPdf}
         loadingText='Carregando'
-        my='10'
+        mt='10'
+        mb='4'
         size='lg'
         colorScheme='blackAlpha'
         variant='ghost'
         onClick={() => fileInput.current && fileInput.current.click()}
+        borderRight='solid 1px'
+        borderBottom='solid 1px'
+        borderColor='blackAlpha.300'
       >
         <HStack color='blackAlpha.900'>
           <BiImport />

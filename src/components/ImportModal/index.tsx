@@ -34,7 +34,7 @@ function ImportModal({ isOpenModal, onCloseModal }: ImportModalProps) {
           alignItems='center'
         >
           <Text fontSize='2xl' as='b' textColor='blackAlpha.800'>
-            Para começar, baixe o pdf gerado na págiana{' '}
+            Baixe o pdf gerado na págiana{' '}
             <Link
               href='https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/Controlador?command=AlunoDisciplinasOfertadas'
               isExternal
@@ -45,12 +45,12 @@ function ImportModal({ isOpenModal, onCloseModal }: ImportModalProps) {
             >
               turmas ofertadas <ExternalLinkIcon mx='2px' />
             </Link>{' '}
-            do Controle Academico.
+            do Controle Acadêmico.
           </Text>
           <Image
             src={gif}
             alt='Download Turmas Ofertadas PDF'
-            my='3'
+            my='5'
             borderRadius='2xl'
           />
           <Text fontSize='2xl' as='b' textColor='blackAlpha.800'>
