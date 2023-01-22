@@ -33,7 +33,7 @@ function ImportModal({ isOpenModal, onCloseModal }: ImportModalProps) {
           flexDirection='column'
           alignItems='center'
         >
-          <Text fontSize='2xl' as='b' textColor='blackAlpha.800'>
+          <Text fontSize='2xl' as='b' textColor='blackAlpha.700'>
             Baixe o pdf gerado na págiana{' '}
             <Link
               href='https://pre.ufcg.edu.br:8443/ControleAcademicoOnline/Controlador?command=AlunoDisciplinasOfertadas'
@@ -53,7 +53,7 @@ function ImportModal({ isOpenModal, onCloseModal }: ImportModalProps) {
             my='5'
             borderRadius='2xl'
           />
-          <Text fontSize='2xl' as='b' textColor='blackAlpha.800'>
+          <Text fontSize='2xl' as='b' textColor='blackAlpha.700'>
             Em seguida importe o pfd clicando no botão abaixo.
           </Text>
           <ImportButton onCloseModal={onCloseModal} />
