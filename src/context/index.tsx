@@ -7,6 +7,7 @@ interface AppContextProps {
   setCheckedById: (id: string, isChecked: boolean) => void
   setCheckedByPeriodo: (periodo: number, isChecked: boolean) => void
   setMarkedById: (id: string) => void
+  setAllMarked: (marked: boolean) => void
 }
 
 const AppContext = createContext<AppContextProps>({
@@ -15,6 +16,7 @@ const AppContext = createContext<AppContextProps>({
   setCheckedById: () => {},
   setCheckedByPeriodo: () => {},
   setMarkedById: () => {},
+  setAllMarked: () => {},
 })
 
 function AppProvider({ children }: { children: JSX.Element }) {
@@ -49,6 +51,12 @@ function AppProvider({ children }: { children: JSX.Element }) {
     setData(newData)
   }
 
+  const setAllMarked = (marked: boolean) => {
+    const newState = data.map((item) => ({ ...item, marked }))
+
+    setData(newState)
+  }
+
   const appProviderValue = useMemo(
     () => ({
       disciplinas: data,
@@ -56,6 +64,7 @@ function AppProvider({ children }: { children: JSX.Element }) {
       setCheckedById,
       setCheckedByPeriodo,
       setMarkedById,
+      setAllMarked,
     }),
     [data],
   )

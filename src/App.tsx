@@ -5,6 +5,7 @@ import ImportModal from './components/ImportModal'
 import NavBar from './components/NavBar'
 import Sidebar from './components/Sidebar'
 import WeekBoard from './components/WeekBoard'
+import BoardTools from './components/WeekBoard/BoardTools'
 import { AppProvider } from './context'
 import theme from './theme'
 
