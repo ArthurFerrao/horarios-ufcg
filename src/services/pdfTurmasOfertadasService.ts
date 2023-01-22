@@ -25,10 +25,10 @@ const regexDenyList = [
   /^Período:.*/,
   /^[0-9]{8} - .*/,
   /^[0-9]* \/ [0 - 9]*/,
-  /^- [a-zA-Z ]*/,
   /^[0-9]*\/[0-9]*\/[0-9]* [0-9]*:[0-9]*:[0-9]*/,
 ]
 
+const professorNameRegex = /^- [a-zA-Z ]*/
 const disciplinaCodeAndNameRegex = /^[0-9]* - .*/
 
 function cleanText(textList: string[]) {
@@ -50,6 +50,11 @@ function formatSchedule(schedule: string) {
   }
 }
 
+function formatProfessorData(data: string) {
+  const [_, nome] = data.split('- ')
+  return nome
+}
+
 function textListToJson(dataList: string[]) {
   const json: DisciplinaPdf[] = []
   let blockCount = 0
@@ -68,11 +73,14 @@ function textListToJson(dataList: string[]) {
         nome,
         horario: [],
         turma: '',
+        professores: [],
       }
     }
 
     if (blockCount === 1) {
       disciplinaObj.turma = data
+    } else if (professorNameRegex.test(data)) {
+      disciplinaObj.professores.push(formatProfessorData(data))
     } else if (blockCount >= 4) {
       disciplinaObj.horario.push(formatSchedule(data))
     }

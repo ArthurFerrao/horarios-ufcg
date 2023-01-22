@@ -17,6 +17,7 @@ declare global {
     nome: string
     turma: string
     horario: horario[]
+    professores: string[]
   }
 
   type Disciplina = DisciplinaPdf & {
