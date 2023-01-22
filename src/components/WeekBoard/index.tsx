@@ -1,6 +1,5 @@
-import { Grid, Center, Text, HStack } from '@chakra-ui/react'
+import { Grid, Center, Text } from '@chakra-ui/react'
 import { memo } from 'react'
-import { BsListCheck } from 'react-icons/bs'
 
 import { DAYS } from '../../constants'
 import useAppContext from '../../hooks/useAppContext'
