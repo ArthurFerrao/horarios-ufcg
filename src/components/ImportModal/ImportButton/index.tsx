@@ -9,16 +9,24 @@ interface ImportButtonPorps {
   onCloseModal: () => void
 }
 
+type statusType =
+  | 'info'
+  | 'warning'
+  | 'success'
+  | 'error'
+  | 'loading'
+  | undefined
+
 function ImportButton({ onCloseModal }: ImportButtonPorps) {
   const [isLoadingPdf, setIsLoadingPdf] = useState(false)
   const { updateDisciplinas } = useAppContext()
   const fileInput = useRef<HTMLInputElement>(null)
   const toast = useToast()
 
-  const toastError = () =>
+  const toastError = (title: string, status: statusType) =>
     toast({
-      title: 'Erro ao importar pdf',
-      status: 'error',
+      title,
+      status,
       isClosable: true,
     })
   const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,12 +44,13 @@ function ImportButton({ onCloseModal }: ImportButtonPorps) {
         getData(data)
           .then((result) => {
             updateDisciplinas(result.disciplinas)
+            toastError('Pdf importado com sucesso', 'success')
             setIsLoadingPdf(false)
             onCloseModal()
           })
           .catch(() => {
             setIsLoadingPdf(false)
-            toastError()
+            toastError('Erro ao importar pdf', 'error')
           })
       }
       e.target.value = ''
